@@ -590,6 +590,80 @@ class basefunc:
             sql_result.append(rows)
         return [columns, sql_result]
 
+    # clickzetta
+    @staticmethod
+    def clickzetta_getdb(uri, schema,**kwargs):
+        engine = create_engine(uri, echo=True)
+        res = engine.execute('SHOW SCHEMAS').fetchall()
+        db_list = []
+        for row in res:
+            for item in row:
+                db_list.append(item)
+        return db_list
+
+    @staticmethod
+    def clickzetta_gettable(uri, database, schema,**kwargs):
+        engine = create_engine(uri, echo=True)
+        res = engine.execute('SHOW TABLES IN ' + schema).fetchall()
+        table_list = []
+        for row in res:
+            meta = basefunc.clickzetta_getmeta(engine=engine, database=database, schema=schema, table=row[1])
+            scores = {"name": row[1], "meta": meta}
+            table_list.append(scores)
+        return table_list
+
+    @staticmethod
+    def clickzetta_getmeta(database, table, schema, engine=None,**kwargs):
+        meta_res = engine.execute('show columns in ' + schema + '.' + table).fetchall()
+        meta = []
+        i = 0
+        for col_data in meta_res:
+            scores = {"key": col_data[2], "colIndex": i, "dataType": col_data[3]}
+            meta.append(scores)
+            i += 1
+        return meta
+
+    @staticmethod
+    def clickzetta_getdata(uri, database, table, schema, rows_num,**kwargs):
+        engine = create_engine(uri, echo=True)
+        data_res = engine.execute('select * from ' + schema + '.' + table + ' limit ' + rows_num).fetchall()
+        data = []
+        for row in data_res:
+            rows = []
+            for item in row:
+                rows.append(item)
+            data.append(rows)
+        return data
+
+    @staticmethod
+    def clickzetta_getdetail(uri, database, table, schema, rows_num,**kwargs):
+        engine = create_engine(uri, echo=True)
+        meta = basefunc.clickzetta_getmeta(database=database, schema=schema, table=table, engine=engine)
+        sql = f'select * from {schema}.{table} limit {rows_num}'
+        res_list = basefunc.clickzetta_getresult(sql=sql, engine=engine)
+        return [meta, res_list[0], res_list[1]]
+
+    @staticmethod
+    def clickzetta_getresult(sql, uri=None, engine=None,**kwargs):
+        if engine is None:
+            engine = create_engine(uri, echo=True)
+        res = engine.execute(sql)
+        data_res = res.fetchall()
+        col_res = res.keys()
+        columns = []
+        for col_data in col_res:
+            columns.append(col_data)
+        sql_result = []
+        for row in data_res:
+            rows = []
+            for item in row:
+                if isinstance(item, numbers.Number):
+                    rows.append(item)
+                else:
+                    rows.append(str(item))
+            sql_result.append(rows)
+        return [columns, sql_result]
+
     # oracle
     @staticmethod
     def oracle_gettable(uri, database, schema,**kwargs):

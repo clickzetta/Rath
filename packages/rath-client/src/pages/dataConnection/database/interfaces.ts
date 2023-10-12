@@ -16,6 +16,7 @@ export type SupportedDatabaseType = (
     | 'snowflake'
     | 'bigquery'
     | 'demo'
+    | 'clickzetta'
 );
 
 export type TableColInfo = {

@@ -134,6 +134,13 @@ const databaseOptions: Array<
         icon: 'snowflake.svg',
     },
     {
+        text: 'clickzetta',
+        key: 'clickzetta',
+        rule: 'clickzetta://{username}:{password}@{instance}.{service}/{workspace}?virtualcluster={vcluster}&schema={schema}',
+        levels: [{ type: 'schema' }, { type: 'table' }],
+        icon: 'clickzetta.png',
+    },
+    {
         text: 'Demo',
         key: 'demo',
         rule: 'bigquery://kanaries-demo',
