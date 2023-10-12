@@ -592,14 +592,14 @@ class basefunc:
 
     # clickzetta
     @staticmethod
-    def clickzetta_getdb(uri, schema,**kwargs):
+    def clickzetta_getschema(uri, db, **kwargs):
         engine = create_engine(uri, echo=True)
         res = engine.execute('SHOW SCHEMAS').fetchall()
-        db_list = []
+        schema_list = []
         for row in res:
             for item in row:
-                db_list.append(item)
-        return db_list
+                schema_list.append(item)
+        return schema_list
 
     @staticmethod
     def clickzetta_gettable(uri, database, schema,**kwargs):

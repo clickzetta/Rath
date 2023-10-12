@@ -134,9 +134,9 @@ const databaseOptions: Array<
         icon: 'snowflake.svg',
     },
     {
-        text: 'clickzetta',
+        text: 'Clickzetta',
         key: 'clickzetta',
-        rule: 'clickzetta://{username}:{password}@{instance}.{service}/{workspace}?virtualcluster={vcluster}&schema={schema}',
+        rule: 'clickzetta://{username}:{password}@{instance}.{service}/{workspace}?virtualcluster={vcluster}',
         levels: [{ type: 'schema' }, { type: 'table' }],
         icon: 'clickzetta.png',
     },
