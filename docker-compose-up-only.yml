@@ -3,9 +3,6 @@ version: "2"
 services:
   base:
     restart: always
-    build:
-      context: .
-      dockerfile: client.dockerfile
     ports:
       - 9083:80
     image: clickzetta/base:1.0.0
@@ -13,15 +10,9 @@ services:
   connector-api:
     restart: always
     network_mode: service:base
-    build:
-      context: ./services/connector
-      dockerfile: Dockerfile
     image: clickzetta/connector-api:1.0.0
   
   prediction-api:
     restart: always
     network_mode: service:base
-    build:
-      context: ./services/prediction
-      dockerfile: Dockerfile
     image: clickzetta/prediction-api:1.0.0
